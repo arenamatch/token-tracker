@@ -1,6 +1,6 @@
 <script>
 var contractAddress = '0xcbb836780fd33c0164df0071efa49dc2bc7a012d';
-var apiKey = 'APIKEY';
+var apiKey = 'MWHDF6JDNJNK8RQA3K3MYFJXEUEYJB1BBV';
 var checkTimeout = 5000;
 var transitionTimeout = 400;
 var originalTokenAmount = 100000000;
@@ -45,14 +45,14 @@ checkSupply();
 </script>
 <style>
 .supplyContainer {
-	color: #FFF;
+	color: #000;
 	font-size: 200%;
 	font-weight: 900;
 	font-family: Montserrat;
-	text-align: center;
+	text-align: left;
 }
 li .supplyContainer {
-	color: #FFF;
+	color: #000;
 	font-size: normal;
 	font-family: Montserrat;
 	text-align: left;
@@ -64,18 +64,18 @@ li .supplyContainer {
 	transition-duration: 0.4s;
 }
 .supplyOutput.changed {
-	color: gold;
+	color: #000;
 }
 .burntOutput {
 	transition-property: color;
 	transition-duration: 0.4s;
 }
 .burntOutput.changed {
-	color: #f00;
+	color: #000;
 }
 </style>
 <div class="supplyContainer">
-  Remaining Total Supply: <span class="supplyOutput">...</span>
+  📊 Remaining Supply: <span class="supplyOutput">...</span>
   <br/>
-  Burnt Tokens: <span class="burntOutput">...</span>
+  🔥 Burnt Tokens: <span class="burntOutput">...</span>
 </div>
