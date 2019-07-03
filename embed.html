@@ -28,13 +28,15 @@ function onUpdateSupply(supply) {
   Array.prototype.forEach.call(supplyEls, function(el, i) {
     el.innerText = supply.toLocaleString("en");
     el.classList.add("changed");
-    burnedEls[i].innerText = (originalTokenAmount - supply).toLocaleString("en");
-    burnedEls[i].classList.add("changed");
+    if (burnedEls[i]) {
+      burnedEls[i].innerText = (originalTokenAmount - supply).toLocaleString("en");
+      burnedEls[i].classList.add("changed");
+    }
   });
   setTimeout(function() {
     Array.prototype.forEach.call(supplyEls, function(el, i) {
       el.classList.remove("changed");
-      burnedEls[i].classList.remove("changed");
+      if (burnedEls[i]) burnedEls[i].classList.remove("changed");
     });
   }, transitionTimeout);
 }
