@@ -3,6 +3,7 @@
 	var apiKey = 'APIKEY';
 	var checkTimeout = 5000;
 	var transitionTimeout = 400;
+	var originalTokenAmount = 100000000;
 	
 	var requestUrl = "https://api.etherscan.io/api?module=stats&action=tokensupply&contractaddress="+contractAddress+"&apikey="+apiKey;
 	
@@ -10,6 +11,7 @@
 	
 	function windowLoaded() {
 		supplyOutput = document.getElementById('supplyOutput');
+		burntOutput = document.getElementById('burntOutput');
 		checkSupply();
 	}
 	
@@ -31,6 +33,8 @@
 	function onUpdateSupply(supply) {
 		supplyOutput.innerText = supply.toLocaleString("en");
 		supplyOutput.classList.add("changed");
+		burntOutput.innerText = supply.toLocaleString("en");
+		burntOutput.classList.add("changed");
 		setTimeout(onUpdateSupplyEnd, transitionTimeout);
 	}
 	
@@ -51,8 +55,18 @@
 	transition-duration: 0.4s;
 }
 #supplyOutput.changed {
+	color: gold;
+}
+#burntOutput {
+	transition-property: color;
+	transition-duration: 0.4s;
+}
+#burntOutput.changed {
 	color: red;
 }
 </style>
-<div id="supplyContainer">Remaining Total Supply: <span id="supplyOutput">...</span>
+<div id="supplyContainer">
+Remaining Total Supply: <span id="supplyOutput">...</span>
+<br/>
+Remaining Total Supply: <span id="burntOutput">...</span>
 </div>
