@@ -33,7 +33,7 @@
 	function onUpdateSupply(supply) {
 		supplyOutput.innerText = supply.toLocaleString("en");
 		supplyOutput.classList.add("changed");
-		burntOutput.innerText = supply.toLocaleString("en");
+		burntOutput.innerText = (originalTokenAmount - supply).toLocaleString("en");
 		burntOutput.classList.add("changed");
 		setTimeout(onUpdateSupplyEnd, transitionTimeout);
 	}
