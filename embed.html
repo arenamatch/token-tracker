@@ -1,0 +1,58 @@
+<script>
+	var contractAddress = '0xcbb836780fd33c0164df0071efa49dc2bc7a012d';
+	var apiKey = 'APIKEY';
+	var checkTimeout = 5000;
+	var transitionTimeout = 400;
+	
+	var requestUrl = "https://api.etherscan.io/api?module=stats&action=tokensupply&contractaddress="+contractAddress+"&apikey="+apiKey;
+	
+	window.addEventListener('load', windowLoaded);
+	
+	function windowLoaded() {
+		supplyOutput = document.getElementById('supplyOutput');
+		checkSupply();
+	}
+	
+    function checkSupply() {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4) {
+                if (this.status == 200) {
+                    var supply = JSON.parse(this.responseText).result;
+                    onUpdateSupply(Number(supply.substring(0, supply.length-18)));
+                }
+                setTimeout(checkSupply, checkTimeout);
+            }
+        };
+		xhttp.open("GET", requestUrl, true);
+		xhttp.send();
+	}
+	
+	function onUpdateSupply(supply) {
+		supplyOutput.innerText = supply.toLocaleString("en");
+		supplyOutput.classList.add("changed");
+		setTimeout(onUpdateSupplyEnd, transitionTimeout);
+	}
+	
+	function onUpdateSupplyEnd() {
+		supplyOutput.classList.remove("changed");
+	}
+</script>
+<style>
+#supplyContainer {
+	color: #FFF;
+	font-size: 200%;
+	font-weight: 900;
+	font-family: Montserrat;
+	text-align: center;
+}
+#supplyOutput {
+	transition-property: color;
+	transition-duration: 0.4s;
+}
+#supplyOutput.changed {
+	color: red;
+}
+</style>
+<div id="supplyContainer">Remaining Total Supply: <span id="supplyOutput">...</span>
+</div>
