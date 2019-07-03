@@ -1,73 +1,71 @@
 <script>
-	var contractAddress = '0xcbb836780fd33c0164df0071efa49dc2bc7a012d';
-	var apiKey = 'APIKEY';
-	var checkTimeout = 5000;
-	var transitionTimeout = 400;
-	var originalTokenAmount = 100000000;
-	
-	var requestUrl = "https://api.etherscan.io/api?module=stats&action=tokensupply&contractaddress="+contractAddress+"&apikey="+apiKey;
-	
-	window.addEventListener('load', windowLoaded);
-	
-	function windowLoaded() {
-		supplyOutput = document.getElementById('supplyOutput');
-		burntOutput = document.getElementById('burntOutput');
-		checkSupply();
-	}
-	
-    function checkSupply() {
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == 4) {
-                if (this.status == 200) {
-                    var supply = JSON.parse(this.responseText).result;
-                    onUpdateSupply(Number(supply.substring(0, supply.length-18)));
-                }
-                setTimeout(checkSupply, checkTimeout);
-            }
-        };
-		xhttp.open("GET", requestUrl, true);
-		xhttp.send();
-	}
-	
-	function onUpdateSupply(supply) {
-		supplyOutput.innerText = supply.toLocaleString("en");
-		supplyOutput.classList.add("changed");
-		burntOutput.innerText = (originalTokenAmount - supply).toLocaleString("en");
-		burntOutput.classList.add("changed");
-		setTimeout(onUpdateSupplyEnd, transitionTimeout);
-	}
-	
-	function onUpdateSupplyEnd() {
-		supplyOutput.classList.remove("changed");
-		burntOutput.classList.remove("changed");
-	}
+var contractAddress = '0xcbb836780fd33c0164df0071efa49dc2bc7a012d';
+var apiKey = 'APIKEY';
+var checkTimeout = 5000;
+var transitionTimeout = 400;
+var originalTokenAmount = 100000000;
+
+var requestUrl = "https://api.etherscan.io/api?module=stats&action=tokensupply&contractaddress="+contractAddress+"&apikey="+apiKey;
+
+function checkSupply() {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4) {
+      if (this.status == 200) {
+        var supply = JSON.parse(this.responseText).result;
+        onUpdateSupply(Number(supply.substring(0, supply.length-18)));
+      }
+      setTimeout(checkSupply, checkTimeout);
+    }
+  }
+  xhttp.open("GET", requestUrl, true);
+  xhttp.send();
+}
+
+function onUpdateSupply(supply) {
+  var supplyEls = document.getElementsByClassName("supplyOutput");
+  var burnedEls = document.getElementsByClassName("burntOutput");
+  Array.prototype.forEach.call(supplyEls, function(el, i) {
+    el.innerText = supply.toLocaleString("en");
+    el.classList.add("changed");
+    burnedEls[i].innerText = (originalTokenAmount - supply).toLocaleString("en");
+    burnedEls[i].classList.add("changed");
+  });
+  setTimeout(function() {
+    Array.prototype.forEach.call(supplyEls, function(el, i) {
+      el.classList.remove("changed");
+      burnedEls[i].classList.remove("changed");
+    });
+  }, transitionTimeout);
+}
+
+checkSupply();
 </script>
 <style>
-#supplyContainer {
+.supplyContainer {
 	color: #FFF;
 	font-size: 200%;
 	font-weight: 900;
 	font-family: Montserrat;
 	text-align: center;
 }
-#supplyOutput {
+.supplyOutput {
 	transition-property: color;
 	transition-duration: 0.4s;
 }
-#supplyOutput.changed {
+.supplyOutput.changed {
 	color: gold;
 }
-#burntOutput {
+.burntOutput {
 	transition-property: color;
 	transition-duration: 0.4s;
 }
-#burntOutput.changed {
+.burntOutput.changed {
 	color: red;
 }
 </style>
-<div id="supplyContainer">
-Remaining Total Supply: <span id="supplyOutput">...</span>
-<br/>
-Burnt Token: <span id="burntOutput">...</span>
+<div class="supplyContainer">
+  Remaining Total Supply: <span class="supplyOutput">...</span>
+  <br/>
+  Burnt Tokens: <span class="burntOutput">...</span>
 </div>
